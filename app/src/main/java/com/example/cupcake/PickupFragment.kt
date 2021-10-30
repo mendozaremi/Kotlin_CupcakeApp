@@ -35,6 +35,7 @@ class PickupFragment : Fragment() {
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentPickupBinding? = null
 
+    // Use the 'by activityViewModels()' Kotlin property delegate from the fragment-ktx artifact
     private val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -50,8 +51,9 @@ class PickupFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
-            nextButton.setOnClickListener { goToNextScreen() }
+            lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
+            pickupFragment = this@PickupFragment
         }
     }
 

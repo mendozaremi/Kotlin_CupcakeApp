@@ -35,6 +35,7 @@ class StartFragment : Fragment() {
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentStartBinding? = null
 
+    // Use the 'by activityViewModels()' Kotlin property delegate from the fragment-ktx artifact
     private val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -48,31 +49,24 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        binding?.apply {
-            // Set up the button click listeners
-            orderOneCupcake.setOnClickListener { orderCupcake(1) }
-            orderSixCupcakes.setOnClickListener { orderCupcake(6) }
-            orderTwelveCupcakes.setOnClickListener { orderCupcake(12) }
-        }
+        binding?.startFragment = this
     }
 
     /**
      * Start an order with the desired quantity of cupcakes and navigate to the next screen.
      */
     fun orderCupcake(quantity: Int) {
-        // shared view model access to methods on viewModel
+        // Update the view model with the quantity
         sharedViewModel.setQuantity(quantity)
 
-        // if no flavor is chosen we default to vanilla
-        if(sharedViewModel.hasNoFlavorSet()) {
-            sharedViewModel.setFlavor(getString((R.string.vanilla)))
+        // If no flavor is set in the view model yet, select vanilla as default flavor
+        if (sharedViewModel.hasNoFlavorSet()) {
+            sharedViewModel.setFlavor(getString(R.string.vanilla))
         }
-        // navigate to fragment desired
+
+        // Navigate to the next destination to select the flavor of the cupcakes
         findNavController().navigate(R.id.action_startFragment_to_flavorFragment)
     }
-
-
 
     /**
      * This fragment lifecycle method is called when the view hierarchy associated with the fragment

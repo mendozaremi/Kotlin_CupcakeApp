@@ -36,6 +36,7 @@ class SummaryFragment : Fragment() {
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentSummaryBinding? = null
 
+    // Use the 'by activityViewModels()' Kotlin property delegate from the fragment-ktx artifact
     private val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -51,8 +52,9 @@ class SummaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
-            sendButton.setOnClickListener { sendOrder() }
+            lifecycleOwner = viewLifecycleOwner
             viewModel = sharedViewModel
+            summaryFragment = this@SummaryFragment
         }
     }
 

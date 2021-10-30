@@ -35,6 +35,7 @@ class FlavorFragment : Fragment() {
     // when the view hierarchy is attached to the fragment.
     private var binding: FragmentFlavorBinding? = null
 
+    // Use the 'by activityViewModels()' Kotlin property delegate from the fragment-ktx artifact
     private val sharedViewModel: OrderViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -50,8 +51,14 @@ class FlavorFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding?.apply {
-            nextButton.setOnClickListener { goToNextScreen() }
+            // Specify the fragment as the lifecycle owner
+            lifecycleOwner = viewLifecycleOwner
+
+            // Assign the view model to a property in the binding class
             viewModel = sharedViewModel
+
+            // Assign the fragment
+            flavorFragment = this@FlavorFragment
         }
     }
 
